@@ -1,0 +1,8 @@
+#ifndef _hash_table_h
+#define _hash_table_h
+template <typename T>
+class hashtable
+{
+
+};
+#endif
