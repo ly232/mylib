@@ -11,10 +11,14 @@ template <typename T>
 class HashTable
 {
  public:
- HashTable():capacity(1024),size(0),data(NULL)
+  HashTable():capacity(1024),size(0),data(NULL)
   {
     data = new std::list<HashObj>[capacity];
   };
+  HashTable(std::size_t cap):capacity(cap),size(0),data(NULL)
+  {
+    data = new std::list<HashObj>[capacity];
+  }
   ~HashTable()
   {
     delete [] data;
@@ -39,6 +43,7 @@ class HashTable
     HashObj ho = HashObj();
     ho.key = key;
     ho.value = value;
+    idx = hashfunc(key);
     data[idx].push_back(ho);
     size++;
     return SUCCESS;
@@ -56,7 +61,8 @@ class HashTable
       if (it->key==key){
 	if (holder)
 	  *holder = it->value;
-	data[idx].erase(it);	
+	data[idx].erase(it);
+	size--;
 	return SUCCESS;
       }
     }
@@ -85,6 +91,7 @@ class HashTable
     return FAIL; //not found: wrong key
   };
   std::size_t get_capacity() const {return capacity;};
+  std::size_t get_size() const {return size;};
  private:
   struct HashObj{
     std::string key;
@@ -92,6 +99,22 @@ class HashTable
   };
   STATUS rehash()
   {
+    int capacity_old = capacity;
+    capacity *= 2;
+    size = 0;
+    std::list<HashObj>* data_old = data;
+    data = new std::list<HashObj>[capacity];
+    for (int i=0; i<capacity_old; i++){
+      if (data_old[i].size()>0){
+	typename std::list<HashObj>::iterator itr = data_old[i].begin();
+	for (;itr!=data_old[i].end();itr++){
+	  std::size_t idx = hashfunc(itr->key);
+	  data[idx].push_back(*itr);
+	  size++;
+	}
+      }
+    }
+    delete [] data_old;
     return FAIL;
   };
   std::size_t hashfunc(const std::string& key) const
