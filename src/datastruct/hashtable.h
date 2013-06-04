@@ -97,6 +97,8 @@ class HashTable
     std::string key;
     T value;
   };
+  HashTable(HashTable<T>& ref){};
+  HashTable<T>& operator=(HashTable<T>& ref){};
   STATUS rehash()
   {
     int capacity_old = capacity;
