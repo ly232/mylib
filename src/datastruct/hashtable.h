@@ -11,11 +11,7 @@ template <typename T>
 class HashTable
 {
  public:
-  HashTable():capacity(1024),size(0),data(NULL)
-  {
-    data = new std::list<HashObj>[capacity];
-  };
-  HashTable(std::size_t cap):capacity(cap),size(0),data(NULL)
+  HashTable(std::size_t cap = 1024):capacity(cap),size(0),data(NULL)
   {
     data = new std::list<HashObj>[capacity];
   }
