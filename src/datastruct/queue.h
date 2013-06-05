@@ -4,16 +4,19 @@
 template <typename T>
 class queue{
  public:
-  queue(){};
+  queue():size(0){};
   ~queue(){};
-  STATUS push(const T& item){
+  STATUS push(T& item){
+    size++;
     return data.append(&item);
   };
   //client is responsible to free holder
-  STATUS pop(T*& holder){
+  STATUS pop(T*& holder = NULL){
+    size--;
     return data.pop_front(holder);
   }
  private:
   linkedlist<T> data;
+  std::size_t size;
 };
 #endif

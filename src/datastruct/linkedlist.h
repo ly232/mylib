@@ -1,5 +1,7 @@
 #ifndef _linkedlist_h
 #define _linkedlist_h
+#include <cstdlib>
+#include <string.h>
 enum STATUS{
   FAIL = 0,
   SUCCESS = 1
@@ -30,7 +32,7 @@ class linkedlist{
      if (!ref){
        node* tmp = new node;
        node* tmp2 = NULL;
-       memcpy(tmp->data, ref->data, sizeof(T));
+       memcpy((void*)&tmp->data, (void*)&ref->data, sizeof(T));
        tmp->next = NULL;
        head = tmp;
        while (ref){
