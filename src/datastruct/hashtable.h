@@ -2,6 +2,7 @@
 #define _hash_table_h
 #include <string>
 #include <list>
+#include <cstdlib>
 enum STATUS{
  FAIL=0,
  SUCCESS=1
@@ -19,6 +20,23 @@ class HashTable
   {
     delete [] data;
   };
+  
+  /***************************************/
+  /* STATUS HashTable<T>::update(std::string key, const T& value)
+  /* update hashtable's entry with key key to value value
+  /* returns fail if key does not exist
+  /***************************************/
+  STATUS update(std::string key, const T& value)
+  {
+    std::size_t idx = hashfunc(key);
+    typename std::list<HashObj>::iterator it = data[idx].begin();
+    for (;it!=data[idx].end();it++ ){
+      if (it->key==key){
+        it->value = value;
+      }
+    }
+    return FAIL;
+  };
 
   /***************************************/
   /* STATUS HashTable<T>::put(std::string key, const T& value)
@@ -32,7 +50,7 @@ class HashTable
     typename std::list<HashObj>::const_iterator cit = data[idx].begin();
     for (;cit!=data[idx].end();cit++){
       if (cit->key==key)
-	return FAIL; //duplicate key not allowed in hash table
+	      return FAIL; //duplicate key not allowed in hash table
     }
     if (size>capacity/2)
       rehash();
